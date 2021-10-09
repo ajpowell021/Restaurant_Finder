@@ -30,6 +30,7 @@ class PlaceDetailsFragment : DaggerFragment() {
 
     private lateinit var mainImageView: ImageView
     private lateinit var nameTextView: TextView
+    private lateinit var ratingTextView: TextView
     private lateinit var phoneTextView: TextView
     private lateinit var addressTextView: TextView
     private lateinit var websiteTextView: TextView
@@ -42,6 +43,7 @@ class PlaceDetailsFragment : DaggerFragment() {
         // Init UI
         mainImageView = rootView.findViewById(R.id.main_image_view)
         nameTextView = rootView.findViewById(R.id.name_text_view)
+        ratingTextView = rootView.findViewById(R.id.rating_text_view)
         phoneTextView = rootView.findViewById(R.id.phone_text_view)
         addressTextView = rootView.findViewById(R.id.address_text_view)
         websiteTextView = rootView.findViewById(R.id.website_text_view)
@@ -69,6 +71,7 @@ class PlaceDetailsFragment : DaggerFragment() {
         }
 
         nameTextView.text = place.name
+        ratingTextView.text = rootView.context.resources.getString(R.string.rating_template, place.rating.toString())
         phoneTextView.text = place.formatted_phone_number
         addressTextView.text = place.formatted_address
 
