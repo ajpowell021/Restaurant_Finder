@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import com.adam.restaurant_finder.R
 import com.adam.restaurant_finder.ViewModelFactory
 import com.adam.restaurant_finder.convertLatLngToString
@@ -25,7 +27,11 @@ import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
 
-class MapFragment: OnMapReadyCallback, GoogleMap.OnMarkerClickListener, DaggerFragment() {
+class MapFragment:
+    OnMapReadyCallback,
+    GoogleMap.OnMarkerClickListener,
+    GoogleMap.OnInfoWindowClickListener,
+    DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -90,9 +96,11 @@ class MapFragment: OnMapReadyCallback, GoogleMap.OnMarkerClickListener, DaggerFr
                         MarkerOptions()
                             .position(LatLng(place.geometry.location.lat, place.geometry.location.lng))
                             .title(place.name)
+                            .snippet(requireContext().resources.getString(R.string.rating_template, place.rating.toString()))
                     )
 
                     map.setOnMarkerClickListener(this)
+                    map.setOnInfoWindowClickListener(this)
                 }
             }
         }
@@ -101,6 +109,16 @@ class MapFragment: OnMapReadyCallback, GoogleMap.OnMarkerClickListener, DaggerFr
     override fun onMarkerClick(marker: Marker): Boolean {
 
         return false
+    }
+
+    override fun onInfoWindowClick(marker: Marker) {
+        val place = viewModel.getPlaceByLocation(marker.position)
+        place?.let {
+            val bundle = bundleOf(PlaceDetailsFragment.placeIdKey to place.place_id)
+            Navigation.findNavController(
+                requireView()).navigate(R.id.action_mapFragment_to_placeDetailsFragment, bundle
+            )
+        }
     }
 
     private fun hideKeyboard() {

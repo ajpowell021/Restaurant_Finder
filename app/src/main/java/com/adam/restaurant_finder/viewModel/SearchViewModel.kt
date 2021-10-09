@@ -11,7 +11,6 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import java.net.ConnectException
-import javax.inject.Inject
 
 
 open class SearchViewModel(
@@ -68,6 +67,14 @@ open class SearchViewModel(
             }
             .let { disposables.add(it) }
     }
+
+    fun getPlaceByLocation(location: LatLng): Place? {
+        return searchResults.value?.firstOrNull {
+            it.geometry?.location?.lat == location.latitude &&
+                    it.geometry.location.lng == location.longitude
+        }
+    }
+
 
     fun setSearchQuery(text: String) {
         searchQuery.value = text
