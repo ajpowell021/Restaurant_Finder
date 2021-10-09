@@ -5,7 +5,7 @@
 
     <string name="google_maps_api">AIzaSyDQSd210wKX_7cz9MELkxhaEOUhFP0AkSk</string>
 
-    <!-- Search Fragment Strings -->
+    <!-- Search Strings -->
     <string name="location_enable_button_text">Enable Location</string>
     <string name="location_permission_explanation">This app won\'t function without your location, please enable location access for this app.</string>
     <string name="location_denied_explanation">Please enable location permissions in the application settings to use this app.</string>
@@ -13,5 +13,9 @@
     <!-- Bottom Navigation -->
     <string name="bottom_nav_list">List</string>
     <string name="bottom_nav_map">Map</string>
+
+    <!-- List View Strings -->
+    <string name="rating_template">Rating: %1$s</string>
+
 
 </resources>

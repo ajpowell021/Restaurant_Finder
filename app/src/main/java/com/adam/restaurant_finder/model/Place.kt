@@ -8,7 +8,8 @@ data class Place (
     val place_id: String,
     val rating: Float,
     val photos: List<Photo>?,
-    val geometry: Geometry
+    val geometry: Geometry,
+    val vicinity: String
 )
 
 data class Geometry (

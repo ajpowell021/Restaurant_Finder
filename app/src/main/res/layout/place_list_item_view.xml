@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp"
@@ -18,21 +19,44 @@
 
         <TextView
             android:id="@+id/name_text_view"
+            style="@style/ListTextStyle"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/image_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            tools:text="Restaurant Name"
+            />
+
+        <TextView
+            android:id="@+id/address_text_view"
+            style="@style/ListTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/name_text_view"
+            app:layout_constraintStart_toStartOf="@id/name_text_view"
+            app:layout_constraintEnd_toStartOf="@id/image_view"
+            tools:text="8084 Test Address Road"
+            />
+
+        <TextView
+            android:id="@+id/rating_text_view"
+            style="@style/ListTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/name_text_view"
+            app:layout_constraintEnd_toStartOf="@id/image_view"
+            app:layout_constraintTop_toBottomOf="@id/address_text_view"
+            tools:text="5.0"
             />
 
         <ImageView
             android:id="@+id/image_view"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:scaleType="fitCenter"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

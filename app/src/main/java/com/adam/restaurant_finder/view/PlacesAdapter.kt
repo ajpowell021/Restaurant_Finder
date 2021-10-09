@@ -5,6 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.content.contentValuesOf
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.adam.restaurant_finder.BuildConfig
 import com.adam.restaurant_finder.R
@@ -13,10 +19,17 @@ import com.adam.restaurant_finder.model.Place
 import com.squareup.picasso.Picasso
 
 
-class PlacesAdapter(private val places: List<Place>, private val picasso: Picasso) : RecyclerView.Adapter<PlacesAdapter.ViewHolder>() {
+class PlacesAdapter(
+    private val places: List<Place>,
+    private val picasso: Picasso,
+    private val navController: NavController
+    ) : RecyclerView.Adapter<PlacesAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val cardHolder: CardView = view.findViewById(R.id.list_card_view)
         val nameTextView: TextView = view.findViewById(R.id.name_text_view)
+        val ratingTextView: TextView = view.findViewById(R.id.rating_text_view)
+        val addressTextView: TextView = view.findViewById(R.id.address_text_view)
         val imageView: ImageView = view.findViewById(R.id.image_view)
     }
 
@@ -27,7 +40,15 @@ class PlacesAdapter(private val places: List<Place>, private val picasso: Picass
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        holder.cardHolder.setOnClickListener {
+            navController.navigate(R.id.action_listFragment_to_placeDetailsFragment)
+        }
+
         holder.nameTextView.text = places[position].name
+        holder.ratingTextView.text =
+            holder.itemView.context.resources.getString(R.string.rating_template, places[position].rating.toString())
+        holder.addressTextView.text = places[position].vicinity
 
         val photo = places[position].photos?.firstOrNull()
         photo?.let {

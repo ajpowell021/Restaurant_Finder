@@ -3,6 +3,7 @@ package com.adam.restaurant_finder
 import com.adam.restaurant_finder.view.MainActivity
 import com.adam.restaurant_finder.view.ListFragment
 import com.adam.restaurant_finder.view.MapFragment
+import com.adam.restaurant_finder.view.PlaceDetailsFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -17,4 +18,7 @@ abstract class AndroidBindingModule {
 
     @ContributesAndroidInjector
     abstract fun getMapFragment(): MapFragment
+
+    @ContributesAndroidInjector
+    abstract fun getDetailsFragment(): PlaceDetailsFragment
 }

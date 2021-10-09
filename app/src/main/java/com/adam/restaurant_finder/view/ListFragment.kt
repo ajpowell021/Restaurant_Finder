@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adam.restaurant_finder.R
@@ -72,7 +73,7 @@ class ListFragment: DaggerFragment() {
 
         // ViewModel Observer
         val placeObserver = Observer<List<Place>> {
-            recyclerView.adapter = PlacesAdapter(it, picasso)
+            recyclerView.adapter = PlacesAdapter(it, picasso, Navigation.findNavController(rootView))
         }
         viewModel.searchResults.observe(viewLifecycleOwner, placeObserver)
 

@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_listFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_placeDetailsFragment"
+            app:destination="@id/placeDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
@@ -21,4 +24,8 @@
             android:id="@+id/action_mapFragment_to_listFragment"
             app:destination="@id/listFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/placeDetailsFragment"
+        android:name="com.adam.restaurant_finder.view.PlaceDetailsFragment"
+        android:label="PlaceDetailsFragment" />
 </navigation>
