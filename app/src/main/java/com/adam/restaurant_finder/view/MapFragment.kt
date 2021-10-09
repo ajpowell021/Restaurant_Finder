@@ -13,11 +13,13 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
 
-class MapFragment: OnMapReadyCallback, DaggerFragment() {
+class MapFragment: OnMapReadyCallback, GoogleMap.OnMarkerClickListener, DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -36,9 +38,31 @@ class MapFragment: OnMapReadyCallback, DaggerFragment() {
     }
 
     override fun onMapReady(map: GoogleMap) {
+        map.clear()
         val userLocation: LatLng? = viewModel.getUserLocation()
         userLocation?.let {
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(it, 10f))
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(it, zoomLevel))
+
+            val places = viewModel.searchResults.value
+
+            places?.map { place ->
+                map.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(place.geometry.location.lat, place.geometry.location.lng))
+                        .title(place.name)
+                )
+
+                map.setOnMarkerClickListener(this)
+            }
         }
+    }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+
+        return false
+    }
+
+    companion object {
+        const val zoomLevel = 12f
     }
 }
