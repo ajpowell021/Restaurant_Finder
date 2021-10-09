@@ -24,6 +24,10 @@ open class SearchViewModel(
 
     private var userLocation: LatLng? = null
 
+    val searchQuery: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
     val detailedPlace: MutableLiveData<Place> by lazy {
         MutableLiveData<Place>()
     }
@@ -63,6 +67,10 @@ open class SearchViewModel(
                 detailedPlace.value = response.place
             }
             .let { disposables.add(it) }
+    }
+
+    fun setSearchQuery(text: String) {
+        searchQuery.value = text
     }
 
     fun setUserLocation(lat: Double, long: Double) {

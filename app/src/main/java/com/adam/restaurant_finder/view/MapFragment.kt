@@ -1,12 +1,18 @@
 package com.adam.restaurant_finder.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.adam.restaurant_finder.R
 import com.adam.restaurant_finder.ViewModelFactory
+import com.adam.restaurant_finder.convertLatLngToString
+import com.adam.restaurant_finder.model.Place
 import com.adam.restaurant_finder.viewModel.SearchViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -30,9 +36,42 @@ class MapFragment: OnMapReadyCallback, GoogleMap.OnMarkerClickListener, DaggerFr
 
         val rootView = inflater.inflate(R.layout.map_fragment, container, false)
 
-
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        // Views
+        val searchView = rootView.findViewById<SearchView>(R.id.search_view)
+
+        // SearchView Setup
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(input: String?): Boolean {
+                if (!input.isNullOrEmpty()) {
+                    viewModel.searchRestaurant(input, convertLatLngToString(viewModel.getUserLocation()!!))
+                    viewModel.setSearchQuery(input)
+                    hideKeyboard()
+                    return true
+                }
+
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                // Do nothing on text change
+                return false
+            }
+        })
+
+        // ViewModel Observer
+        val placeObserver = Observer<List<Place>> {
+            mapFragment.getMapAsync(this)
+        }
+        viewModel.searchResults.observe(viewLifecycleOwner, placeObserver)
+
+        val queryObserver = Observer<String> {
+            searchView.setQuery(it, false)
+        }
+        viewModel.searchQuery.observe(viewLifecycleOwner, queryObserver)
 
         return rootView
     }
@@ -62,6 +101,11 @@ class MapFragment: OnMapReadyCallback, GoogleMap.OnMarkerClickListener, DaggerFr
     override fun onMarkerClick(marker: Marker): Boolean {
 
         return false
+    }
+
+    private fun hideKeyboard() {
+        val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
     companion object {

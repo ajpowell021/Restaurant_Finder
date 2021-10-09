@@ -19,11 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adam.restaurant_finder.R
 import com.adam.restaurant_finder.ViewModelFactory
+import com.adam.restaurant_finder.convertLatLngToString
 import com.adam.restaurant_finder.model.Place
 import com.adam.restaurant_finder.viewModel.SearchViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.LatLng
 import com.squareup.picasso.Picasso
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -59,6 +59,7 @@ class ListFragment: DaggerFragment() {
             override fun onQueryTextSubmit(input: String?): Boolean {
                 if (!input.isNullOrEmpty()) {
                     viewModel.searchRestaurant(input, convertLatLngToString(viewModel.getUserLocation()!!))
+                    viewModel.setSearchQuery(input)
                     hideKeyboard()
                     return true
                 }
@@ -71,11 +72,16 @@ class ListFragment: DaggerFragment() {
             }
         })
 
-        // ViewModel Observer
+        // ViewModel Observers
         val placeObserver = Observer<List<Place>> {
             recyclerView.adapter = PlacesAdapter(it, picasso, Navigation.findNavController(rootView))
         }
         viewModel.searchResults.observe(viewLifecycleOwner, placeObserver)
+
+        val queryObserver = Observer<String> {
+            searchView.setQuery(it, false)
+        }
+        viewModel.searchQuery.observe(viewLifecycleOwner, queryObserver)
 
         // Get the user's location.
 
@@ -126,9 +132,5 @@ class ListFragment: DaggerFragment() {
     private fun hideKeyboard() {
         val inputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
-    }
-
-    private fun convertLatLngToString(latLng: LatLng): String {
-        return latLng.latitude.toString() + "," + latLng.longitude.toString()
     }
 }
