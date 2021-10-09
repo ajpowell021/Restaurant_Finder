@@ -1,8 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/design_default_color_error"
     >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/main_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/place_detail_image_height"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/name_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DetailHeaderText"
+            app:layout_constraintTop_toBottomOf="@id/main_image_view"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="12dp"
+            tools:text = "Restaurant Name Placeholder"
+            />
+
+        <TextView
+            android:id="@+id/phone_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DetailBodyText"
+            android:autoLink="phone"
+            app:layout_constraintTop_toBottomOf="@id/name_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="12dp"
+            tools:text = "999-999-9999"
+            />
+
+        <TextView
+            android:id="@+id/address_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="map"
+            style="@style/DetailBodyText"
+            app:layout_constraintTop_toBottomOf="@id/phone_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="12dp"
+            tools:text = "8084 Test Address"
+            />
+
+        <TextView
+            android:id="@+id/website_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DetailBodyText"
+            app:layout_constraintTop_toBottomOf="@id/address_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="12dp"
+            android:lines="1"
+            android:autoLink="web"
+            android:ellipsize="end"
+            tools:text="www.google.com"
+            />
+
+        <TextView
+            android:id="@+id/hours_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/DetailBodyText"
+            app:layout_constraintTop_toBottomOf="@id/website_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="12dp"
+            tools:text="Hours \n Monday: 10am - 6pm \n Tuesday: 10am - 6pm"
+            />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

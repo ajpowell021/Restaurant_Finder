@@ -16,6 +16,7 @@
             android:id="@+id/action_listFragment_to_placeDetailsFragment"
             app:destination="@id/placeDetailsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.adam.restaurant_finder.view.MapFragment"
@@ -24,8 +25,18 @@
             android:id="@+id/action_mapFragment_to_listFragment"
             app:destination="@id/listFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/placeDetailsFragment"
         android:name="com.adam.restaurant_finder.view.PlaceDetailsFragment"
-        android:label="PlaceDetailsFragment" />
+        android:label="PlaceDetailsFragment">
+
+        <argument
+            android:name="placeId"
+            app:argType="string"
+            android:defaultValue="@null"
+            app:nullable="true"
+            />
+
+    </fragment>
 </navigation>

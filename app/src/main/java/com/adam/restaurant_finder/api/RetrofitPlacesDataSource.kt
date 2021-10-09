@@ -32,4 +32,15 @@ class RetrofitPlacesDataSource(private val service: PlacesService) : RemoteDataS
                 }
             }
     }
+
+    override fun getDetails(placeId: String): Flowable<Place> {
+        return service.getDetails(BuildConfig.API_KEY, placeId)
+            .map {
+                if (it.status != "OK") {
+                    throw Exception()
+                } else {
+                    it.result
+                }
+            }
+    }
 }

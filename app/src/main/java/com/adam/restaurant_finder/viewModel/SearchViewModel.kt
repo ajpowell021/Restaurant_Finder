@@ -2,6 +2,7 @@ package com.adam.restaurant_finder.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.adam.restaurant_finder.api.GetDetails
 import com.adam.restaurant_finder.api.NearbyRestaurants
 import com.adam.restaurant_finder.api.SearchRestaurants
 import com.adam.restaurant_finder.model.Place
@@ -15,12 +16,17 @@ import javax.inject.Inject
 
 open class SearchViewModel(
     private val nearbyRestaurants: NearbyRestaurants,
-    private val searchRestaurants: SearchRestaurants
+    private val searchRestaurants: SearchRestaurants,
+    private val getDetails: GetDetails
     ): ViewModel() {
 
     private val disposables = CompositeDisposable()
 
     private var userLocation: LatLng? = null
+
+    val detailedPlace: MutableLiveData<Place> by lazy {
+        MutableLiveData<Place>()
+    }
 
     val searchResults: MutableLiveData<MutableList<Place>> by lazy {
         MutableLiveData<MutableList<Place>>()
@@ -44,6 +50,17 @@ open class SearchViewModel(
             .doOnError { throw ConnectException("Error: No connection returned from retrofit: " + it.message) }
             .subscribe { response ->
                 searchResults.value = response.places.toMutableList()
+            }
+            .let { disposables.add(it) }
+    }
+
+    fun getDetails(placeId: String) {
+        getDetails.execute(placeId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError { throw ConnectException("Error: No connection returned from retrofit: " + it.message) }
+            .subscribe { response ->
+                detailedPlace.value = response.place
             }
             .let { disposables.add(it) }
     }

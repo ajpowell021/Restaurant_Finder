@@ -17,5 +17,8 @@
     <!-- List View Strings -->
     <string name="rating_template">Rating: %1$s</string>
 
+    <!-- Details Page Strings -->
+    <string name="hours_label"><b>Hours: </b> \n</string>
+
 
 </resources>

@@ -46,13 +46,15 @@ class MapFragment: OnMapReadyCallback, GoogleMap.OnMarkerClickListener, DaggerFr
             val places = viewModel.searchResults.value
 
             places?.map { place ->
-                map.addMarker(
-                    MarkerOptions()
-                        .position(LatLng(place.geometry.location.lat, place.geometry.location.lng))
-                        .title(place.name)
-                )
+                place.geometry?.let {
+                    map.addMarker(
+                        MarkerOptions()
+                            .position(LatLng(place.geometry.location.lat, place.geometry.location.lng))
+                            .title(place.name)
+                    )
 
-                map.setOnMarkerClickListener(this)
+                    map.setOnMarkerClickListener(this)
+                }
             }
         }
     }

@@ -8,12 +8,14 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.contentValuesOf
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.adam.restaurant_finder.BuildConfig
 import com.adam.restaurant_finder.R
+import com.adam.restaurant_finder.createPhotoUrl
 import com.adam.restaurant_finder.model.Photo
 import com.adam.restaurant_finder.model.Place
 import com.squareup.picasso.Picasso
@@ -42,7 +44,8 @@ class PlacesAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.cardHolder.setOnClickListener {
-            navController.navigate(R.id.action_listFragment_to_placeDetailsFragment)
+            val bundle = bundleOf(PlaceDetailsFragment.placeIdKey to places[position].place_id)
+            navController.navigate(R.id.action_listFragment_to_placeDetailsFragment, bundle)
         }
 
         holder.nameTextView.text = places[position].name
@@ -53,17 +56,12 @@ class PlacesAdapter(
         val photo = places[position].photos?.firstOrNull()
         photo?.let {
             picasso
-                .load(getPhotoUrl(photo))
+                .load(createPhotoUrl(photo))
                 .into(holder.imageView)
         }
     }
 
     override fun getItemCount(): Int {
         return places.size
-    }
-
-    private fun getPhotoUrl(photo: Photo): String {
-        return "https://maps.googleapis.com/maps/api/place/photo?maxwidth=${photo.width}" +
-                "&photoreference=${photo.photo_reference}&key=${BuildConfig.API_KEY}"
     }
 }
