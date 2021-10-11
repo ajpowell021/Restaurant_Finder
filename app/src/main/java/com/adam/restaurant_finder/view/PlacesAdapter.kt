@@ -37,17 +37,36 @@ class PlacesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
+        val place = places[position]
+
         holder.cardHolder.setOnClickListener {
-            val bundle = bundleOf(PlaceDetailsFragment.placeIdKey to places[position].place_id)
+            val bundle = bundleOf(PlaceDetailsFragment.placeIdKey to place.place_id)
             navController.navigate(R.id.action_listFragment_to_placeDetailsFragment, bundle)
         }
 
-        holder.nameTextView.text = places[position].name
+        holder.nameTextView.text = place.name
         holder.ratingTextView.text =
-            holder.itemView.context.resources.getString(R.string.rating_template, places[position].rating.toString())
-        holder.addressTextView.text = places[position].vicinity
+            holder.itemView.context.resources.getString(R.string.rating_template, place.rating.toString())
 
-        val photo = places[position].photos?.firstOrNull()
+
+        // Depending on the type of search done, the address may be located
+        // in 1 of 2 fields. We also hide the address line completely in the case
+        // of Google not having an address.
+        holder.addressTextView.visibility = View.VISIBLE
+        holder.addressTextView.text = when {
+            place.vicinity != null -> {
+                place.vicinity
+            }
+            place.formatted_address != null -> {
+                place.formatted_address
+            }
+            else -> {
+                holder.addressTextView.visibility = View.GONE
+                ""
+            }
+        }
+
+        val photo = place.photos?.firstOrNull()
         photo?.let {
             picasso
                 .load(createPhotoUrl(photo))
