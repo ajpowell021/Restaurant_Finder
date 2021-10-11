@@ -11,7 +11,5 @@ open class SearchRestaurants @Inject constructor(private val remote: RemoteDataS
         return remote.searchRestaurants(input, location).map { Response(it) }
     }
 
-    class Request(val input: String, location: String)
-
     class Response(val places: List<Place>)
 }

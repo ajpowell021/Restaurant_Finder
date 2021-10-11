@@ -75,7 +75,6 @@ open class SearchViewModel(
         }
     }
 
-
     fun setSearchQuery(text: String) {
         searchQuery.value = text
     }

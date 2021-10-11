@@ -12,7 +12,7 @@ class RetrofitPlacesDataSource(private val service: PlacesService) : RemoteDataS
         return service.getNearby(BuildConfig.API_KEY, location)
             .map {
                 if (it.status != "OK") {
-                    throw Exception()
+                    emptyList()
                 } else {
                     it.results
                 }
@@ -22,12 +22,9 @@ class RetrofitPlacesDataSource(private val service: PlacesService) : RemoteDataS
     override fun searchRestaurants(input: String, location: String): Flowable<List<Place>> {
         return service.searchRestaurant(BuildConfig.API_KEY, input, location)
             .map {
-                if (it.status == "ZERO_RESULTS") {
-                    // Handle zero results
-                    throw Exception()
-                } else if (it.status != "OK") {
-                    throw Exception()
-                } else {
+             if (it.status != "OK") {
+                    emptyList()
+             } else {
                     it.results
                 }
             }
@@ -37,7 +34,7 @@ class RetrofitPlacesDataSource(private val service: PlacesService) : RemoteDataS
         return service.getDetails(BuildConfig.API_KEY, placeId)
             .map {
                 if (it.status != "OK") {
-                    throw Exception()
+                    throw Exception("No details found")
                 } else {
                     it.result
                 }

@@ -10,7 +10,5 @@ open class NearbyRestaurants @Inject constructor(private val remote: RemoteDataS
         return remote.getNearbyPlaces(location).map { Response(it) }
     }
 
-    class Request()
-
     class Response(val places: List<Place>)
 }

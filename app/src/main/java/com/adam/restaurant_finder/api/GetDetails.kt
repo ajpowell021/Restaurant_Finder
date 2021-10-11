@@ -11,7 +11,5 @@ open class GetDetails @Inject constructor(private val remote: RemoteDataSource) 
         return remote.getDetails(placeId).map { Response(it) }
     }
 
-    class Request(val placeId: String)
-
     class Response(val place: Place)
 }

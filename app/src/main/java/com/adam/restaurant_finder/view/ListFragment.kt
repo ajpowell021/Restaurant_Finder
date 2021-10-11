@@ -35,11 +35,10 @@ class ListFragment: DaggerFragment() {
     @Inject
     lateinit var picasso: Picasso
 
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val viewModel by activityViewModels<SearchViewModel>() { viewModelFactory }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -58,10 +57,12 @@ class ListFragment: DaggerFragment() {
 
             override fun onQueryTextSubmit(input: String?): Boolean {
                 if (!input.isNullOrEmpty()) {
-                    viewModel.searchRestaurant(input, convertLatLngToString(viewModel.getUserLocation()!!))
-                    viewModel.setSearchQuery(input)
-                    hideKeyboard()
-                    return true
+                    viewModel.getUserLocation()?.let { userLocation ->
+                        viewModel.searchRestaurant(input, convertLatLngToString(userLocation))
+                        viewModel.setSearchQuery(input)
+                        hideKeyboard()
+                        return true
+                    }
                 }
                 return false
             }
@@ -83,8 +84,7 @@ class ListFragment: DaggerFragment() {
         }
         viewModel.searchQuery.observe(viewLifecycleOwner, queryObserver)
 
-        // Get the user's location.
-
+        // Get the user's location if we haven't already.
         if (viewModel.getUserLocation() == null) {
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
             getLocation()
@@ -108,10 +108,10 @@ class ListFragment: DaggerFragment() {
 
     private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
-            // Permission was granted
+            // Permission was granted.
             getLocation()
         } else {
-            // Permission was denied
+            // Permission was denied, check if we can ask again.
             val builder = AlertDialog.Builder(requireContext())
             if (shouldShowRequestPermissionRationale(ACCESS_COARSE_LOCATION)) {
                 builder.setMessage(R.string.location_permission_explanation)

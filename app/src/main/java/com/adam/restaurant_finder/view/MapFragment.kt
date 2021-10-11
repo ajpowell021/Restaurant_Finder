@@ -29,7 +29,6 @@ import javax.inject.Inject
 
 class MapFragment:
     OnMapReadyCallback,
-    GoogleMap.OnMarkerClickListener,
     GoogleMap.OnInfoWindowClickListener,
     DaggerFragment() {
 
@@ -40,23 +39,26 @@ class MapFragment:
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
+        // Views
         val rootView = inflater.inflate(R.layout.map_fragment, container, false)
+        val searchView = rootView.findViewById<SearchView>(R.id.search_view)
 
+        // Load map
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        // Views
-        val searchView = rootView.findViewById<SearchView>(R.id.search_view)
 
-        // SearchView Setup
+        // SearchView setup
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(input: String?): Boolean {
                 if (!input.isNullOrEmpty()) {
-                    viewModel.searchRestaurant(input, convertLatLngToString(viewModel.getUserLocation()!!))
-                    viewModel.setSearchQuery(input)
-                    hideKeyboard()
-                    return true
+                    viewModel.getUserLocation()?.let { userLocation ->
+                        viewModel.searchRestaurant(input, convertLatLngToString(userLocation))
+                        viewModel.setSearchQuery(input)
+                        hideKeyboard()
+                        return true
+                    }
                 }
 
                 return false
@@ -68,7 +70,7 @@ class MapFragment:
             }
         })
 
-        // ViewModel Observer
+        // ViewModel observers
         val placeObserver = Observer<List<Place>> {
             mapFragment.getMapAsync(this)
         }
@@ -99,16 +101,10 @@ class MapFragment:
                             .snippet(requireContext().resources.getString(R.string.rating_template, place.rating.toString()))
                     )
 
-                    map.setOnMarkerClickListener(this)
                     map.setOnInfoWindowClickListener(this)
                 }
             }
         }
-    }
-
-    override fun onMarkerClick(marker: Marker): Boolean {
-
-        return false
     }
 
     override fun onInfoWindowClick(marker: Marker) {

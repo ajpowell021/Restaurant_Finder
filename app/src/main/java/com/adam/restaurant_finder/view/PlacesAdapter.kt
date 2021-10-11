@@ -6,17 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
-import androidx.core.content.contentValuesOf
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
-import com.adam.restaurant_finder.BuildConfig
 import com.adam.restaurant_finder.R
 import com.adam.restaurant_finder.createPhotoUrl
-import com.adam.restaurant_finder.model.Photo
 import com.adam.restaurant_finder.model.Place
 import com.squareup.picasso.Picasso
 

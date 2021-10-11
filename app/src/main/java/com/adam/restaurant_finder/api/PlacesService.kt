@@ -15,7 +15,6 @@ interface PlacesService {
         @Query("location") location: String,
     ) : Flowable<SearchResponse>
 
-
     @GET("maps/api/place/textsearch/json?type=restaurant&inputtype=textquery&radius=15000")
     fun searchRestaurant(
         @Query("key") apiKey: String,
